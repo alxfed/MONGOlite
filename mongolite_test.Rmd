@@ -1,0 +1,65 @@
+---
+title: "mongolite_test"
+author: "alxfed"
+date: "March 29, 2018"
+output: html_document
+---
+
+Connection to a remote server. Works without any prelaunched service on the machine.
+
+```{r}
+# Connect to mongolabs
+require(mongolite)
+con <- mongo("mtcars", url = "mongodb://readwrite:test@ds043942.mongolab.com:43942/jeroen_test")
+
+# Wipe collection
+if(con$count() > 0) 
+  con$drop()
+  
+# Insert some data
+con$insert(mtcars)
+stopifnot(con$count() == nrow(mtcars))
+
+# Query data
+mydata <- con$find()
+stopifnot(all.equal(mydata, mtcars))
+con$drop()
+
+# Automatically disconnect when connection is removed
+rm(con)
+gc()
+```
+
+
+
+```{r}
+# Init connection to local mongod
+library(mongolite)
+m <- mongo(collection = "diamonds")
+
+# Insert test data
+data(diamonds, package="ggplot2")
+m$insert(diamonds)
+
+# Check records
+m$count()
+nrow(diamonds)
+
+# Perform a query and retrieve data
+out <- m$find('{"cut" : "Premium", "price" : { "$lt" : 1000 } }')
+
+# Compare
+nrow(out)
+nrow(subset(diamonds, cut == "Premium" & price < 1000))
+```
+
+## Including Plots
+
+
+You can also embed plots, for example:
+
+```{r}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

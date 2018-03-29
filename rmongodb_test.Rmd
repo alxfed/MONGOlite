@@ -1,0 +1,26 @@
+---
+title: "rmongodb_library"
+author: "alxfed"
+date: "March 19, 2018"
+output: html_document
+---
+
+```{r}
+library(rmongodb)
+# connect to MongoDB
+mongo = mongo.create(host = "localhost")
+mongo.is.connected(mongo)
+```
+
+The description of the library use is here: https://gist.github.com/Btibert3/7751989
+
+
+```{r}
+mongo.get.databases(mongo)
+```
+
+```{r}
+mongo.get.database.collections(mongo, db = "test")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

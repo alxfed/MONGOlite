@@ -1,0 +1,44 @@
+---
+title: "mongo_with_Rmongo"
+author: "alxfed"
+date: "March 18, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r}
+require(RMongo)
+
+#Connect
+mongo <- mongoDbConnect("first", "localhost", 27017)
+#Insert data into the collection "test_data"
+output <- dbInsertDocument(mongo, "test_data", '{"foo": "bar"}')
+```
+
+Now queries
+
+```{r}
+#Query for an attribute "foo" AND value "bar"
+output <- dbGetQuery(mongo, "test_data", '{"foo": "bar"}')
+```
+
+Particular keys
+
+```{r}
+utput <- dbGetQueryForKeys(mongo, "test_data", '{"foo": "bar"}', '{"foo": 1}')
+```
+
+Close the connection
+
+```{r}
+dbDisconnect(mongo)
+```
+
